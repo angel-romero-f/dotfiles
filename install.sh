@@ -16,7 +16,7 @@ if [[ "$(uname -s)" == "Darwin" ]]; then
     NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     eval "$(/opt/homebrew/bin/brew shellenv 2>/dev/null || /usr/local/bin/brew shellenv)"
   fi
-  brew install stow starship herdr hunk zsh-autosuggestions zsh-syntax-highlighting
+  brew install stow starship herdr hunk glow zsh-autosuggestions zsh-syntax-highlighting
   brew install --cask ghostty font-jetbrains-mono-nerd-font
   PACKAGES+=(ghostty)
 else
@@ -32,6 +32,12 @@ else
   command -v npm &>/dev/null || { curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash - && sudo apt-get install -y nodejs; }
   npm config set prefix "$HOME/.local"  # global npm dir may not be user-writable otherwise
   command -v hunk &>/dev/null || npm i -g hunkdiff  # published as hunkdiff; binary is `hunk`
+
+  if ! command -v glow &>/dev/null; then
+    mkdir -p "$HOME/.local/bin"
+    GLOW_VERSION=$(curl -fsSL https://api.github.com/repos/charmbracelet/glow/releases/latest | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/')
+    curl -fsSL "https://github.com/charmbracelet/glow/releases/download/v${GLOW_VERSION}/glow_${GLOW_VERSION}_Linux_x86_64.tar.gz" | tar xz -C "$HOME/.local/bin" glow
+  fi
 
   # Ghostty is macOS-only: no point configuring a GUI terminal on a headless box.
 fi
