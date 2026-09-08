@@ -11,6 +11,7 @@ Each top-level directory is a stow "package" mirroring `$HOME`:
 - `zsh/` — `.zshrc`, `.zshenv`
 - `bash/` — `.bash_profile`, `.bashrc`, `.profile`
 - `config/` — CLI tool configs under `~/.config/` (herdr, hunk, starship)
+- `ghostty/` — Ghostty terminal config (macOS only, see below)
 
 ## Usage
 
@@ -21,8 +22,13 @@ git clone <this-repo> ~/dotfiles
 
 This bootstraps Homebrew and Oh My Zsh if they're missing, installs the CLI
 tools referenced here (via Homebrew), and symlinks everything into place with
-`stow`. Not handled (terminal-specific, not scriptable end-to-end): installing
-a Nerd Font and setting it in your terminal emulator's preferences.
+`stow`.
+
+On macOS, it also installs Ghostty and the JetBrains Mono Nerd Font (via
+Homebrew casks) and stows the `ghostty` package, so prompt icons/glyphs work
+out of the box. This step is skipped entirely on Linux/VMs/workspaces — there's
+no terminal emulator to configure there, and Homebrew casks aren't supported
+on Linux anyway.
 
 To add/remove a package manually:
 
