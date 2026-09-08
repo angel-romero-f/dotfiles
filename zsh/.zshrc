@@ -102,8 +102,16 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# Loaded from Homebrew on macOS, or from Oh My Zsh's custom plugins dir on
+# Linux/VMs (see install.sh) — either way, skip quietly if not present.
+for _plugin in zsh-autosuggestions zsh-syntax-highlighting; do
+  if command -v brew &>/dev/null && [[ -f "$(brew --prefix)/share/$_plugin/$_plugin.zsh" ]]; then
+    source "$(brew --prefix)/share/$_plugin/$_plugin.zsh"
+  elif [[ -f "${ZSH_CUSTOM:-$ZSH/custom}/plugins/$_plugin/$_plugin.zsh" ]]; then
+    source "${ZSH_CUSTOM:-$ZSH/custom}/plugins/$_plugin/$_plugin.zsh"
+  fi
+done
+unset _plugin
 
 export PATH="$HOME/.trajectory/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
@@ -118,7 +126,7 @@ fi
 export HOMEBREW_NO_INSECURE_REDIRECT=1
 export HOMEBREW_CASK_OPTS=--require-sha
 
-eval "$(starship init zsh)"
+command -v starship &>/dev/null && eval "$(starship init zsh)"
 
 # Go
 export GOPATH="$HOME/go"
