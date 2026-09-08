@@ -39,10 +39,39 @@ else
     curl -fsSL "https://github.com/charmbracelet/glow/releases/download/v${GLOW_VERSION}/glow_${GLOW_VERSION}_Linux_x86_64.tar.gz" | tar xz -C "$HOME/.local/bin" --strip-components=1 "glow_${GLOW_VERSION}_Linux_x86_64/glow"
   fi
 
+  # Pi — Datadog's AI coding agent CLI, via dogbrew's `pi-setup` (golden config):
+  # https://datadoghq.atlassian.net/wiki/spaces/AIDEVX/pages/7045349995/Pi+Golden+Config
+  # keyutils provides `keyctl`, which Pi's MCP OAuth needs to store tokens in
+  # this container (no D-Bus/libsecret, and the session keyring is revoked
+  # without it).
+  command -v keyctl &>/dev/null || sudo apt-get install -y keyutils
+  if command -v dogbrew &>/dev/null; then
+    dogbrew install pi-setup && pi-setup --skip-auth || \
+      echo "WARNING: pi-setup did not complete — check 'gh auth status' (needs the ddoghq-sandbox EMU org), then re-run 'pi-setup'." >&2
+  fi
+
   # Ghostty is macOS-only: no point configuring a GUI terminal on a headless box.
 fi
 
 command -v herdr &>/dev/null && herdr integration install claude
+
+# Claude Code MCP servers. Idempotent: `claude mcp get` skips servers that
+# already exist. All three use OAuth — no tokens to manage here.
+if command -v claude &>/dev/null; then
+  claude mcp get datadog-mcp &>/dev/null || \
+    claude mcp add --transport http -s user datadog-mcp \
+      https://mcp.datadoghq.com/api/unstable/mcp-server/mcp || true
+
+  claude mcp get atlassian &>/dev/null || \
+    claude mcp add --transport http -s user atlassian \
+      https://mcp.atlassian.com/v1/mcp || true
+
+  # Slack's OAuth doesn't support the generic dynamic-client-registration flow
+  # that a plain `mcp add --transport http` uses, so it has to go through
+  # Slack's own plugin instead.
+  claude plugin list 2>/dev/null | grep -q '^\s*slack@claude-plugins-official$' || \
+    claude plugin install slack@claude-plugins-official || true
+fi
 
 # Symlink dotfiles into place
 for f in .zshrc .zshenv .bash_profile .bashrc .profile \
