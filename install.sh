@@ -25,8 +25,17 @@ else
   command -v starship &>/dev/null || curl -sS https://starship.rs/install.sh | sh -s -- -y -b "$HOME/.local/bin"
   [[ -d "$ZSH_CUSTOM/plugins/zsh-autosuggestions" ]] || git clone -q https://github.com/zsh-users/zsh-autosuggestions "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
   [[ -d "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" ]] || git clone -q https://github.com/zsh-users/zsh-syntax-highlighting "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
-  # herdr/hunk/Ghostty are macOS-only: no Linux install path, no point on a headless box.
+
+  export PATH="$HOME/.local/bin:$PATH"
+  command -v herdr &>/dev/null || curl -fsSL https://herdr.dev/install.sh | sh
+
+  command -v npm &>/dev/null || { curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -; sudo apt-get install -y nodejs; }
+  command -v hunk &>/dev/null || npm i -g hunkdiff  # published as hunkdiff; binary is `hunk`
+
+  # Ghostty is macOS-only: no point configuring a GUI terminal on a headless box.
 fi
+
+command -v herdr &>/dev/null && herdr integration install claude || true
 
 # Symlink dotfiles into place
 for f in .zshrc .zshenv .bash_profile .bashrc .profile \
