@@ -30,6 +30,7 @@ else
   command -v herdr &>/dev/null || curl -fsSL https://herdr.dev/install.sh | sh
 
   command -v npm &>/dev/null || { curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash - && sudo apt-get install -y nodejs; }
+  npm config set prefix "$HOME/.local"  # global npm dir may not be user-writable otherwise
   command -v hunk &>/dev/null || npm i -g hunkdiff  # published as hunkdiff; binary is `hunk`
 
   # Ghostty is macOS-only: no point configuring a GUI terminal on a headless box.
