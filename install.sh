@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -uo pipefail  # no -e: one failed tool install shouldn't block the rest, or the symlinking below
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PACKAGES=(zsh bash config)
@@ -29,13 +29,13 @@ else
   export PATH="$HOME/.local/bin:$PATH"
   command -v herdr &>/dev/null || curl -fsSL https://herdr.dev/install.sh | sh
 
-  command -v npm &>/dev/null || { curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -; sudo apt-get install -y nodejs; }
+  command -v npm &>/dev/null || { curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash - && sudo apt-get install -y nodejs; }
   command -v hunk &>/dev/null || npm i -g hunkdiff  # published as hunkdiff; binary is `hunk`
 
   # Ghostty is macOS-only: no point configuring a GUI terminal on a headless box.
 fi
 
-command -v herdr &>/dev/null && herdr integration install claude || true
+command -v herdr &>/dev/null && herdr integration install claude
 
 # Symlink dotfiles into place
 for f in .zshrc .zshenv .bash_profile .bashrc .profile \
