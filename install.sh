@@ -45,6 +45,21 @@ else
   # this container (no D-Bus/libsecret, and the session keyring is revoked
   # without it).
   command -v keyctl &>/dev/null || sudo apt-get install -y keyutils
+
+  # dogbrew lives at /opt/dogbrew/bin, put on PATH by /etc/profile.d — which
+  # only runs for login shells. `workspaces dotfiles sync` runs this script
+  # non-interactively (not a login shell), so without this, `command -v
+  # dogbrew` below silently fails to find it and the whole block is skipped.
+  export PATH="/opt/dogbrew/bin:$PATH"
+
+  # pi-setup resolves and sets `git config --global datadog.team` itself, but
+  # only as part of the interactive ddtool login flow, which --skip-auth (used
+  # below, since this script runs non-interactively) skips entirely. This
+  # repo's .gitconfig also sets datadog.team, but via an `[include]` that a
+  # plain `git config --global` lookup does not pick up outside a matching
+  # repo — so write it into the global file directly too.
+  git config --global datadog.team "team-aiplatform-trainingserving"
+
   if command -v dogbrew &>/dev/null; then
     dogbrew install pi-setup && pi-setup --skip-auth || \
       echo "WARNING: pi-setup did not complete — check 'gh auth status' (needs the ddoghq-sandbox EMU org), then re-run 'pi-setup'." >&2
