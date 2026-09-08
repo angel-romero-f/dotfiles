@@ -30,4 +30,3 @@ cd ~/dotfiles
 stow zsh          # symlink
 stow -D zsh       # unlink
 ```
-# test
