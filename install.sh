@@ -36,7 +36,7 @@ else
   if ! command -v glow &>/dev/null; then
     mkdir -p "$HOME/.local/bin"
     GLOW_VERSION=$(curl -fsSL https://api.github.com/repos/charmbracelet/glow/releases/latest | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/')
-    curl -fsSL "https://github.com/charmbracelet/glow/releases/download/v${GLOW_VERSION}/glow_${GLOW_VERSION}_Linux_x86_64.tar.gz" | tar xz -C "$HOME/.local/bin" glow
+    curl -fsSL "https://github.com/charmbracelet/glow/releases/download/v${GLOW_VERSION}/glow_${GLOW_VERSION}_Linux_x86_64.tar.gz" | tar xz -C "$HOME/.local/bin" --strip-components=1 "glow_${GLOW_VERSION}_Linux_x86_64/glow"
   fi
 
   # Ghostty is macOS-only: no point configuring a GUI terminal on a headless box.
