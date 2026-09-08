@@ -8,9 +8,9 @@ no company-internal config lives here.
 
 Each top-level directory is a stow "package" mirroring `$HOME`:
 
-- `zsh/` — `.zshrc`, `.zshenv`, `.p10k.zsh`
+- `zsh/` — `.zshrc`, `.zshenv`
 - `bash/` — `.bash_profile`, `.bashrc`, `.profile`
-- `config/` — CLI tool configs under `~/.config/` (herdr, hunk)
+- `config/` — CLI tool configs under `~/.config/` (herdr, hunk, starship)
 
 ## Usage
 

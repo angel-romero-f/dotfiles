@@ -6,7 +6,7 @@ PACKAGES=(zsh bash config)
 
 # --- Install CLI tools this dotfiles repo configures ---
 if command -v brew &>/dev/null; then
-  BREW_FORMULAE=(stow starship herdr hunk)
+  BREW_FORMULAE=(stow starship herdr hunk zsh-autosuggestions zsh-syntax-highlighting)
   for formula in "${BREW_FORMULAE[@]}"; do
     if ! brew list --formula "$formula" &>/dev/null; then
       echo "Installing $formula..."
