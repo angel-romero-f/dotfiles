@@ -1,0 +1,14 @@
+# ~/.config/hunk/config.toml — review-first terminal diff viewer (hunkdiff).
+# See the vault note "hunk-guide" for hotkeys and the agent-driven review flow.
+theme = "catppuccin-mocha"     # matches the catppuccin tmux theme; "auto" picks
+                               # github light/dark from the terminal background
+mode = "auto"                  # auto | split | stack — auto picks by terminal width
+vcs = "git"                    # git | jj | sl — auto-detected if omitted
+watch = false
+exclude_untracked = false
+line_numbers = true
+wrap_lines = false
+menu_bar = true
+agent_notes = false
+prompt_save_view_preferences = true
+transparent_background = false

@@ -1,0 +1,50 @@
+onboarding = false
+# ~/.config/herdr/config.toml
+# Hand-translated from ~/.tmux.conf so herdr keeps my tmux muscle memory.
+# Herdr != tmux; there is no importer. See the vault note "herdr-migration"
+# for the action-by-action rationale behind every line here.
+
+[keys]
+prefix = "ctrl+s"                       # tmux: set -g prefix C-s (still needs `stty -ixon`, already in .zshrc)
+
+# --- Splits: '-' matches exactly; '|' has no clean token (see note) ---
+split_horizontal = "prefix+minus"       # tmux: bind '-' split-window -v (stacked) — key + result both match
+split_vertical   = ["prefix+v", "prefix+backslash"]  # tmux: bind '|' split-window -h (side-by-side); no '|' token in herdr
+
+# --- Pane nav: keep tmux Alt+Arrow muscle memory, add herdr's hjkl ---
+focus_pane_left  = ["prefix+h", "alt+left"]
+focus_pane_down  = ["prefix+j", "alt+down"]
+focus_pane_up    = ["prefix+k", "alt+up"]
+focus_pane_right = ["prefix+l", "alt+right"]
+
+# --- Reclaim tmux muscle memory that herdr defaults elsewhere ---
+detach     = ["prefix+q", "prefix+d"]   # tmux: prefix d = detach (herdr default is only prefix+q)
+rename_tab = ["prefix+shift+t", "prefix+comma"]  # tmux: prefix , = rename window
+goto       = "ctrl+alt+g"               # move session-navigator OFF prefix+g so lazygit can have it
+
+# --- lazygit popup: tmux had `bind g display-popup -d #{pane_current_path} -E lazygit` ---
+[[keys.command]]
+key = "prefix+g"
+type = "popup"
+command = "cd \"$HERDR_ACTIVE_PANE_CWD\" && lazygit"   # -d #{pane_current_path} equivalent
+description = "lazygit (current pane dir)"
+width = "90%"
+height = "90%"
+
+[terminal]
+new_cwd = "follow"                      # tmux: -c "#{pane_current_path}" on splits — inherit source pane's dir
+
+[theme]
+name = "catppuccin"                     # tmux: @catppuccin_flavor 'mocha' — "catppuccin" IS the mocha dark theme
+
+[advanced]
+scrollback_limit_bytes = 20000000       # tmux: history-limit 1000000 (lines→bytes; generous cap, not 1:1)
+
+[session]
+resume_agents_on_restore = true         # ~ @continuum-restore for AI-agent panes (default true anyway)
+
+[experimental]
+pane_history = true                     # restore recent screen contents after restart (can include secrets — see note)
+
+[ui]
+agent_panel_sort = "spaces"
