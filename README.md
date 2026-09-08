@@ -10,8 +10,7 @@ Each top-level directory is a stow "package" mirroring `$HOME`:
 
 - `zsh/` — `.zshrc`, `.zshenv`, `.p10k.zsh`
 - `bash/` — `.bash_profile`, `.bashrc`, `.profile`
-- `herdr/` — `~/.config/herdr/config.toml`
-- `hunk/` — `~/.config/hunk/config.toml`
+- `config/` — CLI tool configs under `~/.config/` (herdr, hunk)
 
 ## Usage
 

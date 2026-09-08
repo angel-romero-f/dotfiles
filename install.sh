@@ -2,7 +2,7 @@
 set -euo pipefail
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PACKAGES=(zsh bash herdr hunk)
+PACKAGES=(zsh bash config)
 
 # --- Install CLI tools this dotfiles repo configures ---
 if command -v brew &>/dev/null; then
