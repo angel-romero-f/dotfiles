@@ -19,8 +19,10 @@ git clone <this-repo> ~/dotfiles
 ~/dotfiles/install.sh
 ```
 
-This installs the CLI tools referenced here (via Homebrew) and symlinks
-everything into place with `stow`.
+This bootstraps Homebrew and Oh My Zsh if they're missing, installs the CLI
+tools referenced here (via Homebrew), and symlinks everything into place with
+`stow`. Not handled (terminal-specific, not scriptable end-to-end): installing
+a Nerd Font and setting it in your terminal emulator's preferences.
 
 To add/remove a package manually:
 
